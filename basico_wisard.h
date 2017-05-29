@@ -10,11 +10,12 @@
 #ifndef BASICO01H
 #define BASICO01H	"@(#)basico_wisard.h $Revision: $"
 
-#define TAMANHO_VETOR		    15
-#define VALOR_SEMENTE		    42
-#define EMBARALHAMENTO_MAXIMO   VALOR_SEMENTE*10
-// #define TAMANHO_UPLA         N_BITS
-// #define QUANTIDADE_UPLAS     TAMANHO_UPLAS/TAMANHO_VETOR
+#define TAMANHO_VETOR_ENTRADA		    256
+#define TAMANHO_UPLA					8
+#define QUANTIDADE_UPLAS     		    TAMANHO_VETOR_ENTRADA/TAMANHO_UPLA
+
+#define VALOR_SEMENTE		    		42
+#define EMBARALHAMENTO_MAXIMO   		VALOR_SEMENTE*10
 
 typedef unsigned short		us;
 /*Definição de tipo ULL. 
@@ -22,17 +23,32 @@ Uso de TYPEDEF: VALOR 	VARIÁVEL
 */
 typedef unsigned long long ull;
 
+
 void
-CriarVetorEmbaralhado (ull *vetorEmbaralhado);
+embaralharEntrada (ull *vetorEntradaEmbaralhado);
+
+void
+embaralharEntrada2 (ull *vetorEntrada);
 
 void 
-GerarTabelaIndices (ull *uplas, ull *discriminadores);
+escreverContador (ull **vetorUplas, ull **vetorDescritorClasse);
 
 void 
-GerarUPLAS (ull *vetorEmbaralhado, ull *vetorUplas);
+GerarUPLAS (ull *vetorEntradaEmbaralhado, ull **vetorUplas);
 
-void 
-BinToDec (ull valorBinario [TAMANHO_VETOR], ull valorDecimal);
+int 
+BinToDec (ull *upla);
   
+
+/*
+int main() {
+  	RAM r;
+  	RAM * ptr = &r;	
+  	ram_create(&r);
+
+	int num = r.numRams;
+	int num2 = ptr->numRams;
+}	
+*/
 
 #endif
