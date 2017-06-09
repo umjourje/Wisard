@@ -6,6 +6,9 @@
 typedef struct _WISARD
 {
 	int numDiscriminators;
+	int numRams;
+	int inputSize;
+	int numBits;
 	DISCRIMINATOR * discriminators;
 } WISARD;
 
@@ -17,5 +20,8 @@ void wisard_train (WISARD *this, ull *entradaBin, int tagClasse);
 
 // Passar a resposta da classificação por referência para *tagClasse.
 void wisard_classify (WISARD *this, ull *entradaBin, int *tagClasse);
+
+
+typedef unsigned long long  ull;
 
 #endif
