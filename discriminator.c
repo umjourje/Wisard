@@ -18,3 +18,8 @@ void discriminator_destroy (DISCRIMINATOR *this)
 	free(this->rams);
 }
 
+void discriminator_train (&this->discriminator [tagClasse], this->inputSize)
+{
+    discriminator_Generate_Upla ();
+    ram_train ();
+}

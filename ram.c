@@ -19,3 +19,5 @@ void ram_destroy (RAM *this)
 {
     free (this->mem);
 }
+
+
