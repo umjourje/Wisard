@@ -18,8 +18,26 @@ void discriminator_destroy (DISCRIMINATOR *this)
 	free(this->rams);
 }
 
-void discriminator_train (&this->discriminator [tagClasse], this->inputSize)
+void discriminator_train (DISCRIMINATOR *this, int *address_array)
 {
-    discriminator_Generate_Upla ();
-    ram_train ();
+    int i;
+    
+    for (i = 0; i < (*this).numRams; ++i)
+    {
+        ram_train (&(*this).rams[i], address_array[i]);
+    }
 }
+
+int dicriminator_read (DISCRIMINATOR *this, int *address_array)
+{
+    int i;
+    int somatorio = 0;
+    
+    for (i = 0; i < (*this).numRams; ++i)
+    {
+        somatorio += ram_read(&(*this).rams[i], address_array[i]);
+    }
+    
+    return somatorio;
+}
+
