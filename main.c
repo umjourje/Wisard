@@ -13,8 +13,8 @@ void copiaComRuido(int *padrao, int *tmp, double ruido);
 #define TAMANHO_VETOR_ENTRADA   256
 #define NUM_DISCRIMINATORS      2
 #define NUM_BITS                4
-#define TREINAMENTOS            1
-#define CLASSIFICACOES          400
+#define TREINAMENTOS            100
+#define CLASSIFICACOES          100
 #define NIVEIS_RUIDO            11
 
 int main()
@@ -36,11 +36,11 @@ int main()
         for (int z =0; z < TREINAMENTOS; ++z)
         {
             
-            copiaComRuido(padrao1, tmp, 0);
+            copiaComRuido(padrao1, tmp, ruido);
             wisard_train (&wisard, tmp, 0);
             //printPadrao(tmp, TAMANHO_VETOR_ENTRADA);
 
-            copiaComRuido(padrao2, tmp, 0);
+            copiaComRuido(padrao2, tmp, ruido);
             wisard_train (&wisard, tmp, 1);
             //printPadrao(tmp, TAMANHO_VETOR_ENTRADA);
 
@@ -66,6 +66,7 @@ int main()
             
         }
         
+        //getchar();
         printf ("Percentual de acertos: %.2f para ruido %.2f \n", acertos/(float)(acertos+erros), ruido);
 
         // Destrói.

@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include<stdio.h>
 
 /*
     Inicializa um objeto wisard
@@ -16,14 +17,25 @@ void wisard_create(WISARD *this, int numDiscriminators, int inputSize, int numBi
 	// Alocar não é inicializar.
 	this->discriminators = (DISCRIMINATOR*) malloc(sizeof(DISCRIMINATOR) * numDiscriminators);
 
+
+    if (inputSize%numBits != 0)
+    {
+        printf("O valor de inputSize nao e multiplo de numBits\n");
+        exit(1);
+    }
+    
     this->numRams = (inputSize / numBits);
+    
 
 	// Inicializar.
 	for (int i = 0; i < numDiscriminators; ++i)
 		discriminator_create (&this->discriminators[i], this->numRams, numBits);
 
     // criando vetor de indices embaralhados.
-    this->vetorIndices = wisard_create_shuffled_indexes ((*this).inputSize);
+    this->vectorIndexes = wisard_create_shuffled_indexes ((*this).inputSize);
+
+    // Alloquei memória no create. Vou inicializar com zero na função.
+    this->vectorAddresses = (int *) malloc (sizeof(int) * (*this).numRams);
 
 }
 
@@ -36,6 +48,9 @@ void wisard_destroy (WISARD *this)
         discriminator_destroy(&this->discriminators[i]);
 
 	free(this->discriminators);
+	
+	free(this->vectorIndexes);
+  	free(this->vectorAddresses);
 }
 
 /*------------------------------------------------------------------------------------------*/
@@ -48,6 +63,12 @@ void wisard_train (WISARD *this, int *entradaBin, int tagClasse)
     // Gerar o Array de Endereços!
     address_array = wisard_decode_input (this, entradaBin);
     
+    /* 
+    for (int i=0; i<(*this).numRams; i++)
+        printf("%d ", address_array[i]);
+    
+    printf("\n");
+    */
     
     // Usar o vetor de endereços. lol
     discriminator_train (&(*this).discriminators [tagClasse], address_array);
@@ -58,18 +79,20 @@ void wisard_train (WISARD *this, int *entradaBin, int tagClasse)
 // Entrada é apresentada à todos os discriminadores
 int wisard_classify (WISARD *this, int *entradaBin)
 {
+    int bestActivation = -1;
     int *address_array;
-    int bestActivation = -1, activation, class, i;
-    
+    int activation;
+    int class = 0;
 
-    // Gerar o Array de Endereços, de novo. =(
+    // Gerar o Array de Endereços, de novo. ='(
     address_array = wisard_decode_input (this, entradaBin);
     
     // Chamar o método de leituraaa
-    for (i = 0; i < (*this).numDiscriminators; ++i)
+    for (int i = 0; i < (*this).numDiscriminators; ++i)
     {
         activation = dicriminator_read (&(*this).discriminators [i], address_array);
 
+        //printf("Activation for class %d was %d\n", i, activation);
         if (bestActivation < activation)
         {   
             bestActivation = activation;
@@ -87,19 +110,19 @@ int wisard_classify (WISARD *this, int *entradaBin)
 
 int *wisard_decode_input (WISARD *this, int *entradaBin)
 {
-
-    // dar free depois!
-    int *vetorEnderecos = (int *) malloc (sizeof(int) * (*this).numRams);
-
     int i, j, k;
-
-    for (i = 0, j = 0; i < (*this).numRams; i += (*this).numBits, j++)
+    
+    // inicializando o vetorEndereços COM ZERO sempre que for decodificar. =)
+   
+    for (i = 0, j = 0; j < (*this).numRams; i += (*this).numBits, j++)
     {
-        for (k =0; k < (*this).numBits; k++)
-            vetorEnderecos [i] = pow (2, k) * entradaBin [ (*this).vetorIndices [j] ];
+        this->vectorAddresses [j] =0;
+        
+        for (k = 0; k < (*this).numBits; k++)
+            this->vectorAddresses [j] += pow (2, k) * entradaBin [ (*this).vectorIndexes [i+k] ];
     }
     
-    return vetorEnderecos;
+    return this->vectorAddresses;
 
 }
 

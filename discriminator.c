@@ -15,6 +15,9 @@ void discriminator_create (DISCRIMINATOR *this, int numRams, int numBits)
 
 void discriminator_destroy (DISCRIMINATOR *this)
 {
+    for (int i=0; i < this->numRams; ++i)
+		ram_destroy (&this->rams[i]);
+
 	free(this->rams);
 }
 

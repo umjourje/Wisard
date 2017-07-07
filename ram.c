@@ -9,7 +9,7 @@ void ram_create (RAM *this, int numBits)
 	(*this).mem = (int*) malloc(sizeof(int) * pow(2, numBits));
 
 	// Inicializar com ZERO.
-	for (int i=0; i < numBits; ++i)
+	for (int i=0; i < pow(2, numBits); ++i)
 	{
 		this->mem[i] = 0;
 	}
