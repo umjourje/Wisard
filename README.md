@@ -12,3 +12,15 @@ Professor / Orientador: Felipe Maia Galvão França - PESC/COPPE
 # Wisard
 
 My BackUP for Wisard implementations. Still learning about it!
+
+
+Compilando a WiSARD:
+
+/Wisard_GitHub
+gcc discriminator.c ram.c wisard.c main.c -o vteste -Wall -O1 -lm
+
+Teste de 'Vazamentos':
+valgrind --leak-check=yes --track-origins=yes --leak-check=full --show-leak-kinds=all ./nomeDoTeste
+
+Teste de Proximidade do ARduino:
+
